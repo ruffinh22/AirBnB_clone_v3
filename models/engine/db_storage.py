@@ -2,7 +2,9 @@
 """
 Contains the class DBStorage
 """
-
+import pymysql
+pymysql.install_as_MySQLdb()
+import MySQLdb
 import models
 from models.amenity import Amenity
 from models.base_model import BaseModel, Base
@@ -74,3 +76,23 @@ class DBStorage:
     def close(self):
         """call remove() method on the private session attribute"""
         self.__session.remove()
+
+    def get(self, cls=None, id=None):
+        """Returns obj based on class name and its ID"""
+        if cls is not None and id is not None:
+            try:
+                return self.__session.query(classes[cls]).get(id)
+            except:
+                return None
+
+        return None
+
+    def count(self, cls=None):
+        """Returns the amount of objects"""
+        if cls is not None:
+            try:
+                return len(self.all(classes[cls]))
+            except:
+                return None
+        else:
+            return len(self.all())
