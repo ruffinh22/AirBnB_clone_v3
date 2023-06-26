@@ -10,11 +10,12 @@ from sqlalchemy.orm import relationship
 
 
 class User(BaseModel, Base):
-    """Representation of a user """
+    """Representation of a user"""
+
     if models.storage_t == 'db':
         __tablename__ = 'users'
         email = Column(String(128), nullable=False)
-        password = Column(String(128), nullable=False)
+        password = Column(String(128), nullable=False, default="")
         first_name = Column(String(128), nullable=True)
         last_name = Column(String(128), nullable=True)
         places = relationship("Place", backref="user")
@@ -26,7 +27,9 @@ class User(BaseModel, Base):
         last_name = ""
 
     def __init__(self, *args, **kwargs):
-        """initializes user"""
+        """Initializes user"""
+        if models.storage_t != 'db':
+            self.password = ""
         super().__init__(*args, **kwargs)
 
     @property
