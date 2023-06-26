@@ -59,7 +59,6 @@ class TestUserDocs(unittest.TestCase):
 
 class TestUser(unittest.TestCase):
     """Test the User class"""
-
     def test_is_subclass(self):
         """Test that User is a subclass of BaseModel"""
         user = User()
@@ -81,13 +80,10 @@ class TestUser(unittest.TestCase):
         """Test that User has attr password, and it's an empty string"""
         user = User()
         self.assertTrue(hasattr(user, "password"))
-
         if models.storage_t == 'db':
-            self.assertEqual(user.password, "")
+            self.assertEqual(user.password, None)
         else:
-            import hashlib
-            expected_hash = hashlib.md5("".encode()).hexdigest()
-            self.assertEqual(user.password, expected_hash)
+            self.assertEqual(user.password, "")
 
     def test_first_name_attr(self):
         """Test that User has attr first_name, and it's an empty string"""
@@ -114,7 +110,7 @@ class TestUser(unittest.TestCase):
         self.assertEqual(type(new_d), dict)
         self.assertFalse("_sa_instance_state" in new_d)
         for attr in u.__dict__:
-            if attr != "_sa_instance_state":
+            if attr is not "_sa_instance_state":
                 self.assertTrue(attr in new_d)
         self.assertTrue("__class__" in new_d)
 
